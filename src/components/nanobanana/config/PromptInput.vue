@@ -1,12 +1,13 @@
 <template>
   <div>
-    <!-- 三个直接生成按钮（美观版） -->
+    <!-- 三个直接生成按钮（带上传检查） -->
     <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px;">
       <el-button
         type="primary"
         size="large"
         round
         :icon="MagicStick"
+        :loading="loading === '定位印花'"
         @click="handleGenerateWithPreset(preset1, '定位印花')"
         style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
@@ -17,6 +18,7 @@
         size="large"
         round
         :icon="MagicStick"
+        :loading="loading === '布匹印花'"
         @click="handleGenerateWithPreset(preset2, '布匹印花')"
         style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
@@ -27,6 +29,7 @@
         size="large"
         round
         :icon="MagicStick"
+        :loading="loading === '消除布纹'"
         @click="handleGenerateWithPreset(preset3, '消除布纹')"
         style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
@@ -48,6 +51,7 @@ export default defineComponent({
   data() {
     return {
       MagicStick,
+      loading: '' as string, // 记录当前哪个按钮正在生成
       preset1: `定位印花：
 处理流程与核心要求：
 图案识别与提取 (核心)：
@@ -94,17 +98,39 @@ export default defineComponent({
           prompt: val
         });
       }
+    },
+    // 获取用户已上传的参考图像
+    referenceImages() {
+      return this.$store.state.nanobanaba?.config?.image_urls || [];
     }
   },
   methods: {
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
+      // 1. 检查是否上传了参考图像
+      if (!this.referenceImages || this.referenceImages.length === 0) {
+        ElMessage.warning('请先上传参考图像（衣物图片）');
+        return;
+      }
+
+      // 2. 设置提示词
       this.prompt = presetText;
+      // 3. 防止重复点击
+      if (this.loading) return;
+      this.loading = buttonName;
       ElMessage.success(`已选择「${buttonName}」，正在生成图片...`);
+
+      // 4. 触发生成（调用父组件的 onGenerate 方法）
       const parent = this.$parent as any;
-      if (parent && typeof parent.onGenerate === 'function') {
-        parent.onGenerate();
-      } else {
-        ElMessage.error('无法触发生成，请稍后再试');
+      try {
+        if (parent && typeof parent.onGenerate === 'function') {
+          await parent.onGenerate();
+        } else {
+          throw new Error('无法找到生成方法');
+        }
+      } catch (err) {
+        ElMessage.error('生成失败，请稍后再试');
+      } finally {
+        this.loading = '';
       }
     }
   },
