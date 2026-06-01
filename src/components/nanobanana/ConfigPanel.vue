@@ -7,6 +7,8 @@
       <aspect-ratio-selector class="mb-4" />
       <image-urls-input class="mb-4" />
     </div>
+    <!-- 隐藏原来的生成按钮 -->
+    <!--
     <div class="flex flex-col items-center justify-center px-5 pb-5">
       <consumption :value="consumption" :service="service" />
       <el-button type="primary" class="btn w-full" round @click="onGenerate">
@@ -14,6 +16,7 @@
         {{ $t('nanobanana.button.generate') }}
       </el-button>
     </div>
+    -->
   </div>
 </template>
 

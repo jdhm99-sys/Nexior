@@ -1,35 +1,53 @@
 <template>
   <div>
-    <!-- 输入框已完全隐藏 -->
-    <!-- <prompt-textarea
-      v-model="prompt"
-      :title="$t('nanobanana.name.prompt')"
-      :info="$t('nanobanana.description.prompt')"
-      :placeholder="$t('nanobanana.placeholder.prompt')"
-    /> -->
-
-    <!-- 三个预设任务按钮 -->
-    <div style="margin-top: 0; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
-      <el-button type="primary" @click="setPresetPrompt(preset1)">定位印花</el-button>
-      <el-button type="success" @click="setPresetPrompt(preset2)">布匹印花</el-button>
-      <el-button type="warning" @click="setPresetPrompt(preset3)">消除布纹</el-button>
+    <!-- 三个直接生成按钮（美观版） -->
+    <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px;">
+      <el-button
+        type="primary"
+        size="large"
+        round
+        :icon="MagicStick"
+        @click="handleGenerateWithPreset(preset1, '定位印花')"
+        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+      >
+        定位印花
+      </el-button>
+      <el-button
+        type="success"
+        size="large"
+        round
+        :icon="MagicStick"
+        @click="handleGenerateWithPreset(preset2, '布匹印花')"
+        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+      >
+        布匹印花
+      </el-button>
+      <el-button
+        type="warning"
+        size="large"
+        round
+        :icon="MagicStick"
+        @click="handleGenerateWithPreset(preset3, '消除布纹')"
+        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+      >
+        消除布纹
+      </el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import PromptTextarea from '@/components/common/PromptTextarea.vue';
+import { ElMessage } from 'element-plus';
+import { MagicStick } from '@element-plus/icons-vue';
 
 export const DEFAULT_PROMPT = '';
 
 export default defineComponent({
   name: 'PromptInput',
-  components: {
-    PromptTextarea
-  },
   data() {
     return {
+      MagicStick,
       preset1: `定位印花：
 处理流程与核心要求：
 图案识别与提取 (核心)：
@@ -79,8 +97,15 @@ export default defineComponent({
     }
   },
   methods: {
-    setPresetPrompt(preset: string) {
-      this.prompt = preset;
+    async handleGenerateWithPreset(presetText: string, buttonName: string) {
+      this.prompt = presetText;
+      ElMessage.success(`已选择「${buttonName}」，正在生成图片...`);
+      const parent = this.$parent as any;
+      if (parent && typeof parent.onGenerate === 'function') {
+        parent.onGenerate();
+      } else {
+        ElMessage.error('无法触发生成，请稍后再试');
+      }
     }
   },
   mounted() {
