@@ -1,10 +1,15 @@
 <template>
   <div class="flex flex-col h-full">
     <div class="flex-1 overflow-y-auto p-5">
-      <model-selector class="mb-4" />
-      <resolution-selector class="mb-4" />
+      <!-- 隐藏模型选择器 -->
+      <!-- <model-selector class="mb-4" /> -->
+      <!-- 隐藏分辨率选择器 -->
+      <!-- <resolution-selector class="mb-4" /> -->
+      <!-- 提示词输入区域（已在 PromptInput 中隐藏输入框，只显示三个按钮） -->
       <prompt-input class="mb-4" />
-      <aspect-ratio-selector class="mb-4" />
+      <!-- 隐藏宽高比选择器 -->
+      <!-- <aspect-ratio-selector class="mb-4" /> -->
+      <!-- 保留参考图像上传 -->
       <image-urls-input class="mb-4" />
     </div>
     <div class="flex flex-col items-center justify-center px-5 pb-5">
@@ -44,7 +49,7 @@ export default defineComponent({
   emits: ['generate'],
   computed: {
     config() {
-      return this.$store.state.nanobanana?.config;
+      return this.$store.state.nanobanaba?.config;
     },
     consumption() {
       const cfg: any = { ...(this.config || {}) };
@@ -58,7 +63,7 @@ export default defineComponent({
       );
     },
     service() {
-      return this.$store.state.nanobanana?.service;
+      return this.$store.state.nanobanaba?.service;
     }
   },
   methods: {

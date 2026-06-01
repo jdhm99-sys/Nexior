@@ -1,16 +1,18 @@
 <template>
   <div>
-    <prompt-textarea
+    <!-- 输入框已完全隐藏 -->
+    <!-- <prompt-textarea
       v-model="prompt"
       :title="$t('nanobanana.name.prompt')"
       :info="$t('nanobanana.description.prompt')"
       :placeholder="$t('nanobanana.placeholder.prompt')"
-    />
-    <!-- 三个预设任务模块 -->
-    <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;">
-      <el-button size="small" type="primary" plain @click="setPresetPrompt(preset1)">定位印花</el-button>
-      <el-button size="small" type="success" plain @click="setPresetPrompt(preset2)">布匹印花</el-button>
-      <el-button size="small" type="warning" plain @click="setPresetPrompt(preset3)">消除布纹</el-button>
+    /> -->
+
+    <!-- 三个预设任务按钮 -->
+    <div style="margin-top: 0; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+      <el-button type="primary" @click="setPresetPrompt(preset1)">定位印花</el-button>
+      <el-button type="success" @click="setPresetPrompt(preset2)">布匹印花</el-button>
+      <el-button type="warning" @click="setPresetPrompt(preset3)">消除布纹</el-button>
     </div>
   </div>
 </template>
