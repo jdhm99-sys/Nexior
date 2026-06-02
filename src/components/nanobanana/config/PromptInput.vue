@@ -1,40 +1,24 @@
 <template>
   <div>
-    <!-- 三个直接生成按钮（带上传检查） -->
     <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px;">
-      <el-button
-        type="primary"
-        size="large"
-        round
-        :icon="MagicStick"
-        :loading="loading === '定位印花'"
+      <button
+        style="background-color: #409eff; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
         @click="handleGenerateWithPreset(preset1, '定位印花')"
-        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
-        定位印花
-      </el-button>
-      <el-button
-        type="success"
-        size="large"
-        round
-        :icon="MagicStick"
-        :loading="loading === '布匹印花'"
+        🎨 定位印花
+      </button>
+      <button
+        style="background-color: #67c23a; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
         @click="handleGenerateWithPreset(preset2, '布匹印花')"
-        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
-        布匹印花
-      </el-button>
-      <el-button
-        type="warning"
-        size="large"
-        round
-        :icon="MagicStick"
-        :loading="loading === '消除布纹'"
+        🧵 布匹印花
+      </button>
+      <button
+        style="background-color: #e6a23c; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
         @click="handleGenerateWithPreset(preset3, '消除布纹')"
-        style="padding: 10px 24px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
       >
-        消除布纹
-      </el-button>
+        ✨ 消除布纹
+      </button>
     </div>
   </div>
 </template>
@@ -42,7 +26,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { ElMessage } from 'element-plus';
-import { MagicStick } from '@element-plus/icons-vue';
 
 export const DEFAULT_PROMPT = '';
 
@@ -50,8 +33,6 @@ export default defineComponent({
   name: 'PromptInput',
   data() {
     return {
-      MagicStick,
-      loading: '' as string, // 记录当前哪个按钮正在生成
       preset1: `定位印花：
 处理流程与核心要求：
 图案识别与提取 (核心)：
@@ -99,38 +80,28 @@ export default defineComponent({
         });
       }
     },
-    // 获取用户已上传的参考图像
     referenceImages() {
-      return this.$store.state.nanobanaba?.config?.image_urls || [];
+      // 修正：拼写为 nanobanana（多一个 n）
+      return this.$store.state.nanobanana?.config?.image_urls || [];
     }
   },
   methods: {
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
-      // 1. 检查是否上传了参考图像
       if (!this.referenceImages || this.referenceImages.length === 0) {
         ElMessage.warning('请先上传参考图像（衣物图片）');
         return;
       }
-
-      // 2. 设置提示词
       this.prompt = presetText;
-      // 3. 防止重复点击
-      if (this.loading) return;
-      this.loading = buttonName;
       ElMessage.success(`已选择「${buttonName}」，正在生成图片...`);
-
-      // 4. 触发生成（调用父组件的 onGenerate 方法）
       const parent = this.$parent as any;
       try {
         if (parent && typeof parent.onGenerate === 'function') {
           await parent.onGenerate();
         } else {
-          throw new Error('无法找到生成方法');
+          throw new Error();
         }
-      } catch (err) {
+      } catch {
         ElMessage.error('生成失败，请稍后再试');
-      } finally {
-        this.loading = '';
       }
     }
   },
