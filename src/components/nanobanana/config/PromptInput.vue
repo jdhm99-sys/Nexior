@@ -22,21 +22,21 @@
       </button>
     </div>
 
-    <!-- 自定义区域：输入框 + 按钮，样式与预设完全同步 -->
+    <!-- 自定义区域 -->
     <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 16px;">
       <input
         v-model="customPrompt"
         placeholder="✏️ 输入自定义提示词（自由模式）"
         style="flex: 1; min-width: 280px; max-width: 500px; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #fafafa; transition: 0.2s;"
-        @focus="e => e.target.style.borderColor = '#409eff'"
-        @blur="e => e.target.style.borderColor = '#dcdfe6'"
+        @focus="onInputFocus"
+        @blur="onInputBlur"
         @keyup.enter="handleCustomGenerate"
       />
       <button
-        style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: 0.2s;"
+        style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: opacity 0.2s;"
         @click="handleCustomGenerate"
-        @mouseenter="e => e.target.style.opacity = '0.85'"
-        @mouseleave="e => e.target.style.opacity = '1'"
+        @mouseenter="onButtonHover"
+        @mouseleave="onButtonLeave"
       >
         🚀 生成
       </button>
@@ -108,6 +108,26 @@ export default defineComponent({
     }
   },
   methods: {
+    // 输入框焦点事件
+    onInputFocus(e: FocusEvent) {
+      const target = e.target as HTMLInputElement;
+      if (target) target.style.borderColor = '#409eff';
+    },
+    onInputBlur(e: FocusEvent) {
+      const target = e.target as HTMLInputElement;
+      if (target) target.style.borderColor = '#dcdfe6';
+    },
+    // 自定义按钮悬停效果
+    onButtonHover(e: MouseEvent) {
+      const target = e.target as HTMLButtonElement;
+      if (target) target.style.opacity = '0.85';
+    },
+    onButtonLeave(e: MouseEvent) {
+      const target = e.target as HTMLButtonElement;
+      if (target) target.style.opacity = '1';
+    },
+
+    // 预设生成
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
       if (!this.referenceImages || this.referenceImages.length === 0) {
         ElMessage.warning('请先上传参考图像（衣物图片）');
@@ -127,6 +147,7 @@ export default defineComponent({
       }
     },
 
+    // 自定义生成
     async handleCustomGenerate() {
       if (!this.customPrompt || !this.customPrompt.trim()) {
         ElMessage.warning('请先输入自定义提示词');
