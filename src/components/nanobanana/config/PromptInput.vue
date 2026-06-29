@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px;">
+    <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px; flex-wrap: wrap;">
+      <!-- 原有三个预设按钮 -->
       <button
         style="background-color: #409eff; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
         @click="handleGenerateWithPreset(preset1, '定位印花')"
@@ -19,6 +20,22 @@
       >
         ✨ 消除布纹
       </button>
+
+      <!-- ========== 新增：自定义输入框 + 按钮 ========== -->
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <input
+          v-model="customPrompt"
+          placeholder="输入自定义提示词..."
+          style="padding: 8px 16px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 14px; width: 240px;"
+        />
+        <button
+          style="background-color: #909399; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
+          @click="handleCustomGenerate"
+        >
+          ✏️ 自定义生成
+        </button>
+      </div>
+      <!-- ============================================= -->
     </div>
   </div>
 </template>
@@ -65,7 +82,10 @@ export default defineComponent({
 样式与颜色一致性： 生成图案的所有样式和颜色（包括所有色阶和纹理感）必须与原始图片中的图案完全相同，无任何偏差。  给图案我，不要文字`,
 
       preset3: `消除布纹
-这是我扫描的布料图案，请对图片进行深度视觉分析，清除布料上的布纹杂点以及可能有的暗纹痕迹，不要改变图内其他内容，重新输出超高清图片`
+这是我扫描的布料图案，请对图片进行深度视觉分析，清除布料上的布纹杂点以及可能有的暗纹痕迹，不要改变图内其他内容，重新输出超高清图片`,
+
+      // ========== 新增：自定义输入框的绑定数据 ==========
+      customPrompt: ''
     };
   },
   computed: {
@@ -81,11 +101,11 @@ export default defineComponent({
       }
     },
     referenceImages() {
-      // 修正：拼写为 nanobanana（多一个 n）
       return this.$store.state.nanobanana?.config?.image_urls || [];
     }
   },
   methods: {
+    // 原有预设生成方法（保持不变）
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
       if (!this.referenceImages || this.referenceImages.length === 0) {
         ElMessage.warning('请先上传参考图像（衣物图片）');
@@ -93,6 +113,30 @@ export default defineComponent({
       }
       this.prompt = presetText;
       ElMessage.success(`已选择「${buttonName}」，正在生成图片...`);
+      const parent = this.$parent as any;
+      try {
+        if (parent && typeof parent.onGenerate === 'function') {
+          await parent.onGenerate();
+        } else {
+          throw new Error();
+        }
+      } catch {
+        ElMessage.error('生成失败，请稍后再试');
+      }
+    },
+
+    // ========== 新增：自定义生成方法 ==========
+    async handleCustomGenerate() {
+      if (!this.customPrompt || !this.customPrompt.trim()) {
+        ElMessage.warning('请先输入自定义提示词');
+        return;
+      }
+      if (!this.referenceImages || this.referenceImages.length === 0) {
+        ElMessage.warning('请先上传参考图像（衣物图片）');
+        return;
+      }
+      this.prompt = this.customPrompt.trim();
+      ElMessage.success('已使用自定义提示词，正在生成图片...');
       const parent = this.$parent as any;
       try {
         if (parent && typeof parent.onGenerate === 'function') {
