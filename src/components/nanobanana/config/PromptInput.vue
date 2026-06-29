@@ -2,46 +2,56 @@
   <div>
     <!-- 预设按钮行 -->
     <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px; flex-wrap: wrap;">
-      <el-button type="primary" round @click="handleGenerateWithPreset(preset1, '定位印花')">
+      <button
+        style="background-color: #409eff; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
+        @click="handleGenerateWithPreset(preset1, '定位印花')"
+      >
         🎨 定位印花
-      </el-button>
-      <el-button type="success" round @click="handleGenerateWithPreset(preset2, '布匹印花')">
+      </button>
+      <button
+        style="background-color: #67c23a; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
+        @click="handleGenerateWithPreset(preset2, '布匹印花')"
+      >
         🧵 布匹印花
-      </el-button>
-      <el-button type="warning" round @click="handleGenerateWithPreset(preset3, '消除布纹')">
+      </button>
+      <button
+        style="background-color: #e6a23c; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
+        @click="handleGenerateWithPreset(preset3, '消除布纹')"
+      >
         ✨ 消除布纹
-      </el-button>
+      </button>
     </div>
 
-    <!-- 自定义区域：输入框 + 生成按钮，独立一行 -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap;">
-      <el-input
+    <!-- 自定义区域：输入框 + 按钮，同一行，宽度自适应 -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 10px;">
+      <input
         v-model="customPrompt"
         placeholder="✏️ 输入自定义提示词（自由模式）"
-        style="width: 400px;"
-        size="large"
-        clearable
+        style="flex: 1; min-width: 200px; max-width: 500px; padding: 12px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 14px; background: #fafafa; transition: 0.2s;"
+        @focus="e => e.target.style.borderColor = '#409eff'"
+        @blur="e => e.target.style.borderColor = '#dcdfe6'"
         @keyup.enter="handleCustomGenerate"
       />
-      <el-button type="primary" size="large" round @click="handleCustomGenerate">
+      <button
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 12px 32px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); white-space: nowrap;"
+        @click="handleCustomGenerate"
+        @mouseenter="e => e.target.style.transform = 'scale(1.03)'"
+        @mouseleave="e => e.target.style.transform = 'scale(1)'"
+      >
         🚀 生成
-      </el-button>
+      </button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { ElMessage, ElButton, ElInput } from 'element-plus';
+import { ElMessage } from 'element-plus';
 
 export const DEFAULT_PROMPT = '';
 
 export default defineComponent({
   name: 'PromptInput',
-  components: {
-    ElButton,
-    ElInput,
-  },
   data() {
     return {
       preset1: `定位印花：
