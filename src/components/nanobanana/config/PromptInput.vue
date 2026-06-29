@@ -22,24 +22,26 @@
       </button>
     </div>
 
-    <!-- 自定义区域 -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 16px;">
-      <input
-        v-model="customPrompt"
-        placeholder="输入自定义提示词"
-        style="flex: 1; min-width: 280px; max-width: 500px; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; transition: 0.2s;"
-        @focus="onInputFocus"
-        @blur="onInputBlur"
-        @keyup.enter="handleCustomGenerate"
-      />
-      <button
-        style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: opacity 0.2s;"
-        @click="handleCustomGenerate"
-        @mouseenter="onButtonHover"
-        @mouseleave="onButtonLeave"
-      >
-        🚀 生成
-      </button>
+    <!-- 自定义区域：输入框占满整个宽度，无 max-width 限制 -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; padding: 0 16px; width: 100%;">
+      <div style="display: flex; width: 100%; gap: 12px; align-items: center;">
+        <input
+          v-model="customPrompt"
+          placeholder="输入自定义提示词"
+          style="flex: 1; min-width: 0; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; transition: 0.2s;"
+          @focus="onInputFocus"
+          @blur="onInputBlur"
+          @keyup.enter="handleCustomGenerate"
+        />
+        <button
+          style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: opacity 0.2s; white-space: nowrap;"
+          @click="handleCustomGenerate"
+          @mouseenter="onButtonHover"
+          @mouseleave="onButtonLeave"
+        >
+          🚀 生成
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -176,12 +178,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* 让输入框的占位符颜色浅一些但可读，文字输入颜色深色 */
 input::placeholder {
   color: #909399;
   font-weight: 400;
 }
 input {
-  color: #1f2f3d !important; /* 确保输入文字深色 */
+  color: #1f2f3d !important;
 }
 </style>
