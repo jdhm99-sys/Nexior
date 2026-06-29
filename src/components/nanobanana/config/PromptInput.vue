@@ -22,21 +22,21 @@
       </button>
     </div>
 
-    <!-- 自定义区域：输入框 + 按钮，同一行，宽度自适应 -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 10px;">
+    <!-- 自定义区域：输入框 + 按钮，样式与预设完全同步 -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 16px;">
       <input
         v-model="customPrompt"
         placeholder="✏️ 输入自定义提示词（自由模式）"
-        style="flex: 1; min-width: 200px; max-width: 500px; padding: 12px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 14px; background: #fafafa; transition: 0.2s;"
+        style="flex: 1; min-width: 280px; max-width: 500px; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #fafafa; transition: 0.2s;"
         @focus="e => e.target.style.borderColor = '#409eff'"
         @blur="e => e.target.style.borderColor = '#dcdfe6'"
         @keyup.enter="handleCustomGenerate"
       />
       <button
-        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 12px 32px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); white-space: nowrap;"
+        style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: 0.2s;"
         @click="handleCustomGenerate"
-        @mouseenter="e => e.target.style.transform = 'scale(1.03)'"
-        @mouseleave="e => e.target.style.transform = 'scale(1)'"
+        @mouseenter="e => e.target.style.opacity = '0.85'"
+        @mouseleave="e => e.target.style.opacity = '1'"
       >
         🚀 生成
       </button>
