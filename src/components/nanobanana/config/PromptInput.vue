@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 预设按钮行 -->
+    <!-- 第一行：三个预设按钮 -->
     <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px; flex-wrap: wrap;">
       <button
         style="background-color: #409eff; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
@@ -22,27 +22,29 @@
       </button>
     </div>
 
-    <!-- 自定义区域：多行文本域 -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; width: 100%;">
-      <div style="display: flex; width: 100%; gap: 12px; align-items: stretch;">
-        <textarea
-          v-model="customPrompt"
-          placeholder="输入自定义提示词，可写很长很长（支持多行）..."
-          rows="4"
-          style="flex: 1; min-width: 0; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; resize: vertical; font-family: inherit; line-height: 1.5;"
-          @focus="onInputFocus"
-          @blur="onInputBlur"
-          @keydown.ctrl.enter="handleCustomGenerate"
-        />
-        <button
-          style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); white-space: nowrap; transition: opacity 0.2s; align-self: center;"
-          @click="handleCustomGenerate"
-          @mouseenter="onButtonHover"
-          @mouseleave="onButtonLeave"
-        >
-          🚀 生成
-        </button>
-      </div>
+    <!-- 第二行：文本框独占整行，宽度100%，高度可调 -->
+    <div style="margin-top: 20px; width: 100%;">
+      <textarea
+        v-model="customPrompt"
+        placeholder="输入自定义提示词（支持多行，可写很长）..."
+        rows="6"
+        style="width: 100%; padding: 12px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; resize: vertical; font-family: inherit; line-height: 1.6; box-sizing: border-box;"
+        @focus="onInputFocus"
+        @blur="onInputBlur"
+        @keydown.ctrl.enter="handleCustomGenerate"
+      />
+    </div>
+
+    <!-- 第三行：生成按钮，独立居中，与预设按钮风格一致 -->
+    <div style="display: flex; justify-content: center; margin-top: 16px;">
+      <button
+        style="background-color: #8e44ad; border: none; color: white; padding: 10px 32px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: opacity 0.2s;"
+        @click="handleCustomGenerate"
+        @mouseenter="onButtonHover"
+        @mouseleave="onButtonLeave"
+      >
+        🚀 生成
+      </button>
     </div>
   </div>
 </template>
@@ -181,6 +183,7 @@ export default defineComponent({
 <style scoped>
 textarea::placeholder {
   color: #909399;
+  font-weight: 400;
 }
 textarea {
   color: #1f2f3d !important;
