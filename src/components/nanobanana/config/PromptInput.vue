@@ -26,8 +26,8 @@
     <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap; padding: 0 16px;">
       <input
         v-model="customPrompt"
-        placeholder="✏️ 输入自定义提示词（自由模式）"
-        style="flex: 1; min-width: 280px; max-width: 500px; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #fafafa; transition: 0.2s;"
+        placeholder="输入自定义提示词"
+        style="flex: 1; min-width: 280px; max-width: 500px; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; transition: 0.2s;"
         @focus="onInputFocus"
         @blur="onInputBlur"
         @keyup.enter="handleCustomGenerate"
@@ -108,7 +108,6 @@ export default defineComponent({
     }
   },
   methods: {
-    // 输入框焦点事件
     onInputFocus(e: FocusEvent) {
       const target = e.target as HTMLInputElement;
       if (target) target.style.borderColor = '#409eff';
@@ -117,7 +116,6 @@ export default defineComponent({
       const target = e.target as HTMLInputElement;
       if (target) target.style.borderColor = '#dcdfe6';
     },
-    // 自定义按钮悬停效果
     onButtonHover(e: MouseEvent) {
       const target = e.target as HTMLButtonElement;
       if (target) target.style.opacity = '0.85';
@@ -127,7 +125,6 @@ export default defineComponent({
       if (target) target.style.opacity = '1';
     },
 
-    // 预设生成
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
       if (!this.referenceImages || this.referenceImages.length === 0) {
         ElMessage.warning('请先上传参考图像（衣物图片）');
@@ -147,7 +144,6 @@ export default defineComponent({
       }
     },
 
-    // 自定义生成
     async handleCustomGenerate() {
       if (!this.customPrompt || !this.customPrompt.trim()) {
         ElMessage.warning('请先输入自定义提示词');
@@ -178,3 +174,14 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+/* 让输入框的占位符颜色浅一些但可读，文字输入颜色深色 */
+input::placeholder {
+  color: #909399;
+  font-weight: 400;
+}
+input {
+  color: #1f2f3d !important; /* 确保输入文字深色 */
+}
+</style>
