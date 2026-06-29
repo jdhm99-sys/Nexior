@@ -1,53 +1,47 @@
 <template>
   <div>
+    <!-- 预设按钮行 -->
     <div style="display: flex; gap: 16px; justify-content: center; margin-top: 8px; flex-wrap: wrap;">
-      <!-- 原有三个预设按钮 -->
-      <button
-        style="background-color: #409eff; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
-        @click="handleGenerateWithPreset(preset1, '定位印花')"
-      >
+      <el-button type="primary" round @click="handleGenerateWithPreset(preset1, '定位印花')">
         🎨 定位印花
-      </button>
-      <button
-        style="background-color: #67c23a; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
-        @click="handleGenerateWithPreset(preset2, '布匹印花')"
-      >
+      </el-button>
+      <el-button type="success" round @click="handleGenerateWithPreset(preset2, '布匹印花')">
         🧵 布匹印花
-      </button>
-      <button
-        style="background-color: #e6a23c; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
-        @click="handleGenerateWithPreset(preset3, '消除布纹')"
-      >
+      </el-button>
+      <el-button type="warning" round @click="handleGenerateWithPreset(preset3, '消除布纹')">
         ✨ 消除布纹
-      </button>
+      </el-button>
+    </div>
 
-      <!-- ========== 新增：自定义输入框 + 按钮 ========== -->
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <input
-          v-model="customPrompt"
-          placeholder="输入自定义提示词..."
-          style="padding: 8px 16px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 14px; width: 240px;"
-        />
-        <button
-          style="background-color: #909399; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);"
-          @click="handleCustomGenerate"
-        >
-          ✏️ 自定义生成
-        </button>
-      </div>
-      <!-- ============================================= -->
+    <!-- 自定义区域：输入框 + 生成按钮，独立一行 -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; gap: 12px; align-items: center; flex-wrap: wrap;">
+      <el-input
+        v-model="customPrompt"
+        placeholder="✏️ 输入自定义提示词（自由模式）"
+        style="width: 400px;"
+        size="large"
+        clearable
+        @keyup.enter="handleCustomGenerate"
+      />
+      <el-button type="primary" size="large" round @click="handleCustomGenerate">
+        🚀 生成
+      </el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElButton, ElInput } from 'element-plus';
 
 export const DEFAULT_PROMPT = '';
 
 export default defineComponent({
   name: 'PromptInput',
+  components: {
+    ElButton,
+    ElInput,
+  },
   data() {
     return {
       preset1: `定位印花：
@@ -84,7 +78,6 @@ export default defineComponent({
       preset3: `消除布纹
 这是我扫描的布料图案，请对图片进行深度视觉分析，清除布料上的布纹杂点以及可能有的暗纹痕迹，不要改变图内其他内容，重新输出超高清图片`,
 
-      // ========== 新增：自定义输入框的绑定数据 ==========
       customPrompt: ''
     };
   },
@@ -105,7 +98,6 @@ export default defineComponent({
     }
   },
   methods: {
-    // 原有预设生成方法（保持不变）
     async handleGenerateWithPreset(presetText: string, buttonName: string) {
       if (!this.referenceImages || this.referenceImages.length === 0) {
         ElMessage.warning('请先上传参考图像（衣物图片）');
@@ -125,7 +117,6 @@ export default defineComponent({
       }
     },
 
-    // ========== 新增：自定义生成方法 ==========
     async handleCustomGenerate() {
       if (!this.customPrompt || !this.customPrompt.trim()) {
         ElMessage.warning('请先输入自定义提示词');
