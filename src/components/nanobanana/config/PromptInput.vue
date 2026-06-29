@@ -22,19 +22,20 @@
       </button>
     </div>
 
-    <!-- 自定义区域：输入框占满整个宽度，无 max-width 限制 -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; padding: 0 16px; width: 100%;">
-      <div style="display: flex; width: 100%; gap: 12px; align-items: center;">
-        <input
+    <!-- 自定义区域：多行文本域 -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; width: 100%;">
+      <div style="display: flex; width: 100%; gap: 12px; align-items: stretch;">
+        <textarea
           v-model="customPrompt"
-          placeholder="输入自定义提示词"
-          style="flex: 1; min-width: 0; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; transition: 0.2s;"
+          placeholder="输入自定义提示词，可写很长很长（支持多行）..."
+          rows="4"
+          style="flex: 1; min-width: 0; padding: 10px 20px; border-radius: 40px; border: 1px solid #dcdfe6; outline: none; font-size: 16px; background: #ffffff; color: #1f2f3d; resize: vertical; font-family: inherit; line-height: 1.5;"
           @focus="onInputFocus"
           @blur="onInputBlur"
-          @keyup.enter="handleCustomGenerate"
+          @keydown.ctrl.enter="handleCustomGenerate"
         />
         <button
-          style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); transition: opacity 0.2s; white-space: nowrap;"
+          style="background-color: #8e44ad; border: none; color: white; padding: 10px 24px; border-radius: 40px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); white-space: nowrap; transition: opacity 0.2s; align-self: center;"
           @click="handleCustomGenerate"
           @mouseenter="onButtonHover"
           @mouseleave="onButtonLeave"
@@ -111,11 +112,11 @@ export default defineComponent({
   },
   methods: {
     onInputFocus(e: FocusEvent) {
-      const target = e.target as HTMLInputElement;
+      const target = e.target as HTMLTextAreaElement;
       if (target) target.style.borderColor = '#409eff';
     },
     onInputBlur(e: FocusEvent) {
-      const target = e.target as HTMLInputElement;
+      const target = e.target as HTMLTextAreaElement;
       if (target) target.style.borderColor = '#dcdfe6';
     },
     onButtonHover(e: MouseEvent) {
@@ -178,11 +179,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-input::placeholder {
+textarea::placeholder {
   color: #909399;
-  font-weight: 400;
 }
-input {
+textarea {
   color: #1f2f3d !important;
 }
 </style>
